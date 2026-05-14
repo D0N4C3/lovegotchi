@@ -19,23 +19,16 @@ interface StatCardProps {
   icon: React.ReactNode;
   label: string;
   value: string;
-  color: string;
-  colorLight: string;
+  tint: string;
 }
 
-function StatCard({ icon, label, value, color, colorLight }: StatCardProps) {
+function StatCard({ icon, label, value, tint }: StatCardProps) {
   return (
-    <View style={styles.statCard}>
-      <LinearGradient
-        colors={[`${color}20`, `${color}08`]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.statCardGradient}
-      />
-      <View style={[styles.statIconBg, { backgroundColor: `${color}25` }]}>
+    <View style={[styles.statCard, { borderColor: `${tint}40` }]}>
+      <View style={[styles.statIconBg, { backgroundColor: `${tint}25` }]}>
         {icon}
       </View>
-      <Text style={[styles.statValue, { color }]}>{value}</Text>
+      <Text style={[styles.statValue, { color: tint }]}>{value}</Text>
       <Text style={styles.statLabel}>{label}</Text>
     </View>
   );
@@ -45,14 +38,17 @@ interface MilestoneProps {
   title: string;
   date: string;
   completed: boolean;
+  isLast: boolean;
 }
 
-function Milestone({ title, date, completed }: MilestoneProps) {
+function Milestone({ title, date, completed, isLast }: MilestoneProps) {
   return (
     <View style={styles.milestoneWrapper}>
-      <View style={[styles.milestoneConnector, completed && styles.milestoneConnectorCompleted]} />
+      {!isLast && (
+        <View style={[styles.milestoneConnector, completed && styles.milestoneConnectorCompleted]} />
+      )}
       <View style={[styles.milestoneDot, completed && styles.milestoneDotCompleted]}>
-        {completed && <Sparkles size={10} color={Colors.background} />}
+        {completed && <Sparkles size={9} color={Colors.background} />}
       </View>
       <View style={styles.milestoneContent}>
         <Text style={[styles.milestoneTitle, completed && styles.milestoneTitleCompleted]}>
@@ -64,26 +60,30 @@ function Milestone({ title, date, completed }: MilestoneProps) {
   );
 }
 
+const STAGES = ["egg", "baby", "child", "teen", "adult", "legendary"] as const;
+
 export default function CoupleScreen() {
   const { name, streak, longestStreak, level, xp, stage, careActionsToday } = usePetStore();
 
   const progress = Math.min(100, (careActionsToday.length / 6) * 100);
+  const currentStageIndex = STAGES.indexOf(stage as typeof STAGES[number]);
 
-  const milestones: MilestoneProps[] = [
-    { title: "First Day Together", date: "Jan 14, 2026", completed: true },
-    { title: "7 Day Streak", date: "Jan 21, 2026", completed: true },
-    { title: "30 Day Streak", date: "Feb 13, 2026", completed: true },
-    { title: "100 Day Streak", date: "Apr 24, 2026", completed: true },
+  const milestones: Omit<MilestoneProps, "isLast">[] = [
+    { title: "First Day Together",  date: "Jan 14, 2026", completed: true },
+    { title: "7-Day Streak",        date: "Jan 21, 2026", completed: true },
+    { title: "30-Day Streak",       date: "Feb 13, 2026", completed: true },
+    { title: "100-Day Streak",      date: "Apr 24, 2026", completed: true },
     { title: "6 Month Anniversary", date: "Jul 14, 2026", completed: false },
-    { title: "1 Year Anniversary", date: "Jan 14, 2027", completed: false },
+    { title: "1 Year Anniversary",  date: "Jan 14, 2027", completed: false },
   ];
-
-  const stages = ["egg", "baby", "child", "teen", "adult", "legendary"];
-  const currentStageIndex = stages.indexOf(stage);
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top"]}>
-      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>Our Journey</Text>
@@ -96,81 +96,67 @@ export default function CoupleScreen() {
             icon={<Flame size={20} color={Colors.primary} />}
             label="Streak"
             value={`${streak}`}
-            color={Colors.primary}
-            colorLight={Colors.primaryLight}
+            tint={Colors.primary}
           />
           <StatCard
             icon={<Trophy size={20} color={Colors.accent} />}
             label="Best"
             value={`${longestStreak}`}
-            color={Colors.accent}
-            colorLight={Colors.accentLight}
+            tint={Colors.accent}
           />
           <StatCard
-            icon={<Heart size={20} color={Colors.petCoral} />}
+            icon={<Heart size={20} color={Colors.secondaryLight} />}
             label="Level"
             value={`${level}`}
-            color={Colors.petCoral}
-            colorLight={Colors.petPink}
+            tint={Colors.secondaryLight}
           />
           <StatCard
-            icon={<TrendingUp size={20} color={Colors.secondary} />}
+            icon={<TrendingUp size={20} color={Colors.tealLight} />}
             label="XP"
             value={`${xp}`}
-            color={Colors.secondary}
-            colorLight={Colors.secondaryLight}
+            tint={Colors.tealLight}
           />
         </View>
 
-        {/* Progress Section */}
-        <View style={styles.progressCard}>
-          <LinearGradient
-            colors={["rgba(255,255,255,0.06)", "rgba(255,255,255,0.02)"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.progressGradient}
-          />
+        {/* Daily Progress */}
+        <View style={styles.card}>
           <View style={styles.progressHeader}>
             <View style={styles.progressLabelRow}>
-              <View style={[styles.progressIcon, { backgroundColor: "rgba(245,193,86,0.15)" }]}>
-                <Target size={16} color={Colors.accent} />
+              <View style={[styles.iconBg, { backgroundColor: "rgba(175,169,236,0.15)" }]}>
+                <Target size={16} color={Colors.primaryLight} />
               </View>
-              <Text style={styles.progressTitle}>Today Progress</Text>
+              <Text style={styles.cardTitle}>Today's Progress</Text>
             </View>
-            <Text style={styles.progressPercent}>{Math.round(progress)}%</Text>
+            <Text style={[styles.progressPercent, { color: Colors.primaryLight }]}>
+              {Math.round(progress)}%
+            </Text>
           </View>
-          <View style={styles.progressBarBg}>
-            <View style={[styles.progressBarFill, { width: `${progress}%` }]}>
+          <View style={styles.progressTrack}>
+            <View style={[styles.progressFill, { width: `${progress}%` }]}>
               <LinearGradient
-                colors={[Colors.accentLight, Colors.accent]}
+                colors={[Colors.primaryLight, Colors.primary]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
-                style={styles.progressBarGradient}
+                style={StyleSheet.absoluteFill}
               />
             </View>
           </View>
-          <Text style={styles.progressSubtext}>
-            {careActionsToday.length}/6 care actions completed today
+          <Text style={styles.progressSub}>
+            {careActionsToday.length} of 6 care actions completed
           </Text>
         </View>
 
-        {/* Pet Evolution */}
+        {/* Evolution */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <View style={[styles.sectionIcon, { backgroundColor: "rgba(143,188,143,0.15)" }]}>
-              <Sparkles size={16} color={Colors.secondary} />
+            <View style={[styles.iconBg, { backgroundColor: "rgba(93,202,165,0.15)" }]}>
+              <Sparkles size={16} color={Colors.tealLight} />
             </View>
             <Text style={styles.sectionTitle}>Evolution</Text>
           </View>
-          <View style={styles.evolutionCard}>
-            <LinearGradient
-              colors={["rgba(255,255,255,0.04)", "rgba(255,255,255,0.01)"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.evolutionGradient}
-            />
+          <View style={styles.card}>
             <View style={styles.evolutionRow}>
-              {stages.map((s, i) => {
+              {STAGES.map((s, i) => {
                 const isCurrent = s === stage;
                 const isPast = currentStageIndex > i;
                 return (
@@ -184,7 +170,7 @@ export default function CoupleScreen() {
                     >
                       {isCurrent && <View style={styles.evolutionDotInner} />}
                     </View>
-                    {i < stages.length - 1 && (
+                    {i < STAGES.length - 1 && (
                       <View
                         style={[
                           styles.evolutionLine,
@@ -197,49 +183,44 @@ export default function CoupleScreen() {
               })}
             </View>
             <Text style={styles.evolutionText}>
-              {name} is currently a <Text style={styles.evolutionHighlight}>{stage}</Text>
+              {name} is currently a{" "}
+              <Text style={styles.evolutionHighlight}>{stage}</Text>
             </Text>
-            <Text style={styles.evolutionSubtext}>
-              {100 - (xp % 100)} XP until next level
-            </Text>
+            <Text style={styles.evolutionSub}>{100 - (xp % 100)} XP until next level</Text>
           </View>
         </View>
 
         {/* Milestones */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <View style={[styles.sectionIcon, { backgroundColor: "rgba(155,130,200,0.15)" }]}>
-              <Trophy size={16} color="#B39DDB" />
+            <View style={[styles.iconBg, { backgroundColor: "rgba(155,130,200,0.15)" }]}>
+              <Trophy size={16} color={Colors.primaryLight} />
             </View>
             <Text style={styles.sectionTitle}>Milestones</Text>
           </View>
-          <View style={styles.milestonesCard}>
+          <View style={styles.card}>
             {milestones.map((milestone, index) => (
-              <Milestone key={index} {...milestone} />
+              <Milestone
+                key={milestone.title}
+                {...milestone}
+                isLast={index === milestones.length - 1}
+              />
             ))}
           </View>
         </View>
 
         {/* Next Anniversary */}
-        <View style={styles.anniversaryCard}>
-          <LinearGradient
-            colors={["rgba(255,139,123,0.10)", "rgba(255,139,123,0.03)"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.anniversaryGradient}
-          />
-          <View style={[styles.anniversaryIcon, { backgroundColor: "rgba(255,139,123,0.15)" }]}>
-            <Calendar size={20} color={Colors.primary} />
+        <View style={[styles.card, styles.anniversaryCard]}>
+          <View style={[styles.iconBg, { backgroundColor: "rgba(212,83,126,0.15)" }]}>
+            <Calendar size={20} color={Colors.secondary} />
           </View>
           <View style={styles.anniversaryContent}>
             <Text style={styles.anniversaryLabel}>Next Anniversary</Text>
             <Text style={styles.anniversaryValue}>6 Month Anniversary</Text>
-            <Text style={styles.anniversaryDate}>In 62 days</Text>
+            <Text style={[styles.anniversaryDate, { color: Colors.secondary }]}>In 62 days</Text>
           </View>
-          <Clock size={20} color={Colors.textLight} />
+          <Clock size={18} color={Colors.textLight} />
         </View>
-
-        <View style={styles.bottomSpacer} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -252,11 +233,15 @@ const styles = StyleSheet.create({
   },
   scroll: {
     flex: 1,
+  },
+  scrollContent: {
     paddingHorizontal: 20,
+    paddingBottom: 40,
   },
   header: {
     marginTop: 8,
     marginBottom: 24,
+    gap: 4,
   },
   title: {
     fontSize: 28,
@@ -266,180 +251,142 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 14,
     color: Colors.textMuted,
-    marginTop: 2,
   },
+
+  // Shared card shell
+  card: {
+    backgroundColor: Colors.surface,
+    borderRadius: 24,
+    padding: 18,
+    borderWidth: 0.5,
+    borderColor: Colors.border,
+    gap: 12,
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: Colors.text,
+  },
+  iconBg: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  // Stats
   statsGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 12,
-    marginBottom: 20,
+    marginBottom: 16,
   },
   statCard: {
-    borderRadius: 24,
+    borderRadius: 20,
     padding: 16,
     alignItems: "center",
     width: "47%",
-    overflow: "hidden",
-    position: "relative",
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  statCardGradient: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    gap: 8,
+    backgroundColor: Colors.surface,
+    borderWidth: 0.5,
   },
   statIconBg: {
     width: 44,
     height: 44,
-    borderRadius: 16,
+    borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 10,
   },
   statValue: {
     fontSize: 26,
     fontWeight: "800",
-    marginBottom: 2,
   },
   statLabel: {
     fontSize: 12,
     color: Colors.textMuted,
     fontWeight: "600",
   },
-  progressCard: {
-    borderRadius: 24,
-    padding: 18,
-    marginBottom: 20,
-    overflow: "hidden",
-    position: "relative",
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  progressGradient: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
+
+  // Progress
   progressHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 12,
   },
   progressLabelRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
   },
-  progressIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  progressTitle: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: Colors.text,
-  },
   progressPercent: {
     fontSize: 18,
     fontWeight: "800",
-    color: Colors.accent,
   },
-  progressBarBg: {
-    height: 12,
-    backgroundColor: Colors.border,
-    borderRadius: 6,
+  progressTrack: {
+    height: 10,
+    backgroundColor: "rgba(255,255,255,0.08)",
+    borderRadius: 99,
     overflow: "hidden",
-    marginBottom: 10,
   },
-  progressBarFill: {
+  progressFill: {
     height: "100%",
-    borderRadius: 6,
+    borderRadius: 99,
     overflow: "hidden",
   },
-  progressBarGradient: {
-    flex: 1,
-    borderRadius: 6,
-  },
-  progressSubtext: {
+  progressSub: {
     fontSize: 13,
     color: Colors.textMuted,
   },
+
+  // Sections
   section: {
-    marginBottom: 20,
+    marginTop: 8,
+    marginBottom: 16,
+    gap: 12,
   },
   sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    marginBottom: 12,
-  },
-  sectionIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "700",
     color: Colors.text,
   },
-  evolutionCard: {
-    borderRadius: 24,
-    padding: 18,
-    overflow: "hidden",
-    position: "relative",
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  evolutionGradient: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
+
+  // Evolution
   evolutionRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 18,
   },
   evolutionStep: {
     flexDirection: "row",
     alignItems: "center",
   },
   evolutionDot: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: Colors.border,
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: "rgba(255,255,255,0.10)",
     borderWidth: 2,
     borderColor: Colors.textLight,
   },
   evolutionDotCurrent: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
     backgroundColor: Colors.primary,
     borderColor: Colors.primaryLight,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
   },
   evolutionDotInner: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
     backgroundColor: Colors.text,
   },
   evolutionDotPast: {
@@ -447,15 +394,15 @@ const styles = StyleSheet.create({
     borderColor: Colors.secondary,
   },
   evolutionLine: {
-    width: 22,
-    height: 3,
-    backgroundColor: Colors.border,
+    width: 20,
+    height: 2,
+    backgroundColor: "rgba(255,255,255,0.10)",
   },
   evolutionLineActive: {
     backgroundColor: Colors.secondary,
   },
   evolutionText: {
-    fontSize: 15,
+    fontSize: 14,
     color: Colors.textMuted,
     textAlign: "center",
   },
@@ -463,33 +410,27 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: Colors.primary,
   },
-  evolutionSubtext: {
+  evolutionSub: {
     fontSize: 13,
     color: Colors.textLight,
     textAlign: "center",
-    marginTop: 4,
   },
-  milestonesCard: {
-    backgroundColor: Colors.surface,
-    borderRadius: 24,
-    padding: 18,
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
+
+  // Milestones
   milestoneWrapper: {
     flexDirection: "row",
     alignItems: "flex-start",
-    paddingVertical: 10,
+    paddingVertical: 8,
+    paddingLeft: 26,
     position: "relative",
-    paddingLeft: 24,
   },
   milestoneConnector: {
     position: "absolute",
     left: 6,
-    top: 22,
+    top: 20,
     width: 2,
     height: "100%",
-    backgroundColor: Colors.border,
+    backgroundColor: "rgba(255,255,255,0.10)",
   },
   milestoneConnectorCompleted: {
     backgroundColor: Colors.secondary,
@@ -497,82 +438,62 @@ const styles = StyleSheet.create({
   milestoneDot: {
     position: "absolute",
     left: 0,
-    top: 14,
+    top: 12,
     width: 14,
     height: 14,
     borderRadius: 7,
-    backgroundColor: Colors.border,
+    backgroundColor: "rgba(255,255,255,0.10)",
     borderWidth: 2,
     borderColor: Colors.background,
-  },
-  milestoneDotCompleted: {
-    backgroundColor: Colors.secondary,
     alignItems: "center",
     justifyContent: "center",
   },
+  milestoneDotCompleted: {
+    backgroundColor: Colors.secondary,
+  },
   milestoneContent: {
     flex: 1,
+    gap: 2,
   },
   milestoneTitle: {
     fontSize: 14,
     fontWeight: "600",
     color: Colors.textLight,
-    marginBottom: 2,
   },
   milestoneTitleCompleted: {
     color: Colors.text,
   },
   milestoneDate: {
     fontSize: 12,
-    color: Colors.textLight,
+    color: Colors.textHint,
   },
+
+  // Anniversary
   anniversaryCard: {
-    borderRadius: 24,
-    padding: 18,
     flexDirection: "row",
     alignItems: "center",
     gap: 14,
-    marginBottom: 20,
-    overflow: "hidden",
-    position: "relative",
-    borderWidth: 1,
-    borderColor: "rgba(255,139,123,0.2)",
-  },
-  anniversaryGradient: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  anniversaryIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
+    marginBottom: 8,
+    borderColor: "rgba(212,83,126,0.25)",
   },
   anniversaryContent: {
     flex: 1,
+    gap: 2,
   },
   anniversaryLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: Colors.textMuted,
     fontWeight: "600",
-    marginBottom: 2,
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
   },
   anniversaryValue: {
     fontSize: 16,
     fontWeight: "700",
     color: Colors.text,
-    marginBottom: 2,
   },
   anniversaryDate: {
     fontSize: 13,
-    color: Colors.primary,
     fontWeight: "700",
-  },
-  bottomSpacer: {
-    height: 30,
   },
 });
