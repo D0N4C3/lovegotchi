@@ -1,6 +1,7 @@
 import Constants from "expo-constants";
 import { GoogleAuthProvider, signInWithCredential, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import * as Google from "expo-auth-session/providers/google";
+import { makeRedirectUri } from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
 import { auth } from "@/services/firebase/config";
 
@@ -17,6 +18,11 @@ const getGoogleConfigValue = (envKey: string, extraKey: keyof ExtraConfig, fallb
   process.env[envKey] ?? extra[extraKey] ?? fallbackValue;
 
 const googleAuthConfig = {
+  expoClientId: getGoogleConfigValue(
+    "EXPO_PUBLIC_GOOGLE_OAUTH_EXPO_CLIENT_ID",
+    "googleOauthExpoClientId",
+    "1082720826925-7pgvfi2ohf5mrpfveapm34nit9qqjj5q.apps.googleusercontent.com",
+  ),
   clientId: getGoogleConfigValue(
     "EXPO_PUBLIC_GOOGLE_OAUTH_WEB_CLIENT_ID",
     "googleOauthWebClientId",
@@ -36,9 +42,14 @@ export const logoutUser = () => signOut(auth);
 
 export const useGooglePrompt = () =>
   Google.useAuthRequest({
+    expoClientId: googleAuthConfig.expoClientId,
     clientId: googleAuthConfig.clientId,
     iosClientId: googleAuthConfig.iosClientId,
     androidClientId: googleAuthConfig.androidClientId,
+    redirectUri: makeRedirectUri({
+      scheme: "lovegotchi",
+      path: "oauthredirect",
+    }),
   });
 
 export const signInWithGoogleToken = async (idToken: string) => {
