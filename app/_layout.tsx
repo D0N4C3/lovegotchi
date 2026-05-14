@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import { AuthProvider, useAuth } from "@/providers/AuthProvider";
+import { ToastProvider } from "@/providers/ToastProvider";
 
 SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient();
@@ -31,5 +32,5 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   useEffect(() => { SplashScreen.hideAsync(); }, []);
-  return <QueryClientProvider client={queryClient}><GestureHandlerRootView style={{ flex: 1 }}><StatusBar style="light" /><AuthProvider><RootLayoutNav /></AuthProvider></GestureHandlerRootView></QueryClientProvider>;
+  return <QueryClientProvider client={queryClient}><GestureHandlerRootView style={{ flex: 1 }}><StatusBar style="light" /><ToastProvider><AuthProvider><RootLayoutNav /></AuthProvider></ToastProvider></GestureHandlerRootView></QueryClientProvider>;
 }
