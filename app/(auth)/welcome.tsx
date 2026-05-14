@@ -1,3 +1,30 @@
-import { Link } from "expo-router"; import { View, Text, Pressable, StyleSheet } from "react-native"; import Colors from "@/constants/colors";
-export default function Welcome(){return <View style={s.c}><Text style={s.t}>Lovegotchi</Text><Text style={s.sub}>Raise your shared companion together.</Text><Link href='/(auth)/login' asChild><Pressable style={s.b}><Text style={s.bt}>Login</Text></Pressable></Link><Link href='/(auth)/signup' asChild><Pressable style={[s.b,s.o]}><Text style={s.bt}>Create account</Text></Pressable></Link></View>}
-const s=StyleSheet.create({c:{flex:1,justifyContent:'center',padding:24,backgroundColor:Colors.background},t:{fontSize:42,fontWeight:'800',color:Colors.text},sub:{color:Colors.textMuted,marginBottom:24},b:{backgroundColor:Colors.primary,padding:16,borderRadius:16,marginVertical:6},o:{backgroundColor:Colors.secondary},bt:{textAlign:'center',fontWeight:'700',color:Colors.textDark}})
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { Link } from "expo-router";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { LinearGradient } from "expo-linear-gradient";
+import { AuthShell } from "@/components/auth/AuthShell";
+import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import Colors from "@/constants/colors";
+
+export default function Welcome() {
+  return (
+    <AuthShell>
+      <Animated.View entering={FadeInDown.delay(80)} style={styles.hero}>
+        <LinearGradient colors={[Colors.primary, Colors.secondary]} style={styles.badge}><Text style={styles.badgeText}>Lovegotchi</Text></LinearGradient>
+        <Text style={styles.title}>Grow love, one tiny moment at a time.</Text>
+        <Text style={styles.subtitle}>A cozy home for two hearts and one adorable digital companion.</Text>
+      </Animated.View>
+      <Link href="/(auth)/login" asChild><PrimaryButton label="Continue" onPress={() => {}} /></Link>
+      <Link href="/(auth)/signup" asChild><PrimaryButton style={styles.alt} label="Create account" onPress={() => {}} /></Link>
+    </AuthShell>
+  );
+}
+const styles = StyleSheet.create({
+  hero: { gap: 10, marginBottom: 10 },
+  badge: { alignSelf: "flex-start", borderRadius: 999, paddingHorizontal: 14, paddingVertical: 8 },
+  badgeText: { color: "white", fontWeight: "700" },
+  title: { color: Colors.text, fontWeight: "800", fontSize: 28 },
+  subtitle: { color: Colors.textMuted, fontSize: 15, lineHeight: 22 },
+  alt: { backgroundColor: "rgba(255,255,255,0.2)" },
+});

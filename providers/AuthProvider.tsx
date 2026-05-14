@@ -1,12 +1,11 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "@/services/firebase/config";
-import { createOrGetProfile, listenProfile, listenRelationship, listenPet, listenRequests } from "@/services/firestore/userService";
-import { emailLogin, emailSignUp, logoutUser, signInWithGoogleToken, useGooglePrompt } from "@/services/auth/authService";
+import { createOrGetProfile, listenPet, listenProfile, listenRelationship, listenRequests } from "@/services/firestore/userService";
+import { emailLogin, emailSignUp, logoutUser, requestPasswordReset, signInWithGoogleToken, useGooglePrompt } from "@/services/auth/authService";
 import type { PartnerRequest, PetDoc, Relationship, UserProfile } from "@/types/models";
 
 const AuthContext = createContext<any>(null);
-
 const genCode = () => Math.random().toString(36).slice(2, 8).toUpperCase();
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -19,52 +18,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authLoading, setAuthLoading] = useState(false);
   const [request, response, promptAsync] = useGooglePrompt();
 
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (user) => {
-      setFirebaseUser(user);
-      if (user) {
-        await createOrGetProfile({ uid: user.uid, displayName: user.displayName ?? "", username: `user_${user.uid.slice(0, 6)}`, inviteCode: genCode(), avatar: user.photoURL, email: user.email ?? "", partnerId: null, relationshipId: null, onboardingCompleted: false, pushToken: null, premium: false });
-      }
-      setLoading(false);
-    });
-    return unsub;
-  }, []);
+  useEffect(() => onAuthStateChanged(auth, async (user) => { setFirebaseUser(user); if (user) await createOrGetProfile({ uid: user.uid, displayName: user.displayName ?? "", username: `user_${user.uid.slice(0, 6)}`, inviteCode: genCode(), avatar: user.photoURL, email: user.email ?? "", partnerId: null, relationshipId: null, onboardingCompleted: false, pushToken: null, premium: false }); setLoading(false); }), []);
+  useEffect(() => { if (!firebaseUser) return; return listenProfile(firebaseUser.uid, setProfile); }, [firebaseUser?.uid]);
+  useEffect(() => { if (!profile?.uid) return; return listenRequests(profile.uid, setRequests); }, [profile?.uid]);
+  useEffect(() => { if (!profile?.relationshipId) return; return listenRelationship(profile.relationshipId, setRelationship); }, [profile?.relationshipId]);
+  useEffect(() => { if (!relationship?.petId) return; return listenPet(relationship.petId, setPet); }, [relationship?.petId]);
+  useEffect(() => { if (response?.type === "success" && response.authentication?.idToken) signInWithGoogleToken(response.authentication.idToken); }, [response]);
 
-  useEffect(() => {
-    if (!firebaseUser) return;
-    return listenProfile(firebaseUser.uid, setProfile);
-  }, [firebaseUser?.uid]);
-
-  useEffect(() => {
-    if (!profile?.uid) return;
-    return listenRequests(profile.uid, setRequests);
-  }, [profile?.uid]);
-
-  useEffect(() => {
-    if (!profile?.relationshipId) return;
-    const unsubRel = listenRelationship(profile.relationshipId, setRelationship);
-    return unsubRel;
-  }, [profile?.relationshipId]);
-
-  useEffect(() => {
-    if (!relationship?.petId) return;
-    return listenPet(relationship.petId, setPet);
-  }, [relationship?.petId]);
-
-  useEffect(() => {
-    if (response?.type === "success") {
-      signInWithGoogleToken(response.authentication?.idToken ?? "");
-    }
-  }, [response]);
+  const withLoading = async (fn: () => Promise<any>) => {
+    setAuthLoading(true);
+    try { await fn(); } finally { setAuthLoading(false); }
+  };
 
   const value = useMemo(() => ({
     firebaseUser, profile, relationship, pet, requests, loading, authLoading, googleReady: !!request,
-    login: async (email: string, password: string) => { setAuthLoading(true); try { await emailLogin(email, password);} finally {setAuthLoading(false);} },
-    signup: async (email: string, password: string) => { setAuthLoading(true); try { await emailSignUp(email, password);} finally {setAuthLoading(false);} },
-    loginGoogle: async () => promptAsync(),
-    logout: logoutUser,
+    login: (email: string, password: string) => withLoading(() => emailLogin(email, password)),
+    signup: (email: string, password: string) => withLoading(() => emailSignUp(email, password)),
+    forgotPassword: (email: string) => withLoading(() => requestPasswordReset(email)),
+    loginGoogle: () => promptAsync(),
+    logout: () => withLoading(logoutUser),
   }), [firebaseUser, profile, relationship, pet, requests, loading, authLoading, request]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
 export const useAuth = () => useContext(AuthContext);
