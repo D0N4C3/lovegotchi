@@ -1,4 +1,4 @@
-# Project Overview — “Lovegotchi” (Working Title)
+# Project Overview — “Lovegotchi”
 
 ## Tagline
 
