@@ -135,7 +135,7 @@ export default function CoupleScreen() {
               <View style={[styles.progressIcon, { backgroundColor: "rgba(245,193,86,0.15)" }]}>
                 <Target size={16} color={Colors.accent} />
               </View>
-              <Text style={styles.progressTitle}>Today's Progress</Text>
+              <Text style={styles.progressTitle}>Today Progress</Text>
             </View>
             <Text style={styles.progressPercent}>{Math.round(progress)}%</Text>
           </View>
