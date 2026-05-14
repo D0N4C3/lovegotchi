@@ -1,60 +1,29 @@
 export const Colors = {
-  // Base backgrounds - deep warm twilight
-  background: "#1A1625",
-  backgroundLight: "#242030",
-  surface: "rgba(255, 255, 255, 0.06)",
-  surfaceElevated: "rgba(255, 255, 255, 0.10)",
-  surfaceWarm: "rgba(255, 140, 100, 0.08)",
-
-  // Primary - warm coral sunset
-  primary: "#FF8B7B",
-  primaryLight: "#FFB5A7",
-  primaryDark: "#E06B5A",
-  primaryGlow: "rgba(255, 139, 123, 0.35)",
-
-  // Secondary - soft sage
-  secondary: "#8FBC8F",
-  secondaryLight: "#B8D4B8",
-  secondaryGlow: "rgba(143, 188, 143, 0.3)",
-
-  // Accent - golden amber
-  accent: "#F5C156",
-  accentLight: "#FDE8A0",
-  accentGlow: "rgba(245, 193, 86, 0.35)",
-
-  // Text - warm off-white with depth
-  text: "#F5EDE6",
-  textMuted: "#A89F9A",
-  textLight: "#7A726D",
-  textDark: "#4A3F35",
-
-  // Borders - subtle warm glass
-  border: "rgba(255, 255, 255, 0.08)",
-  borderLight: "rgba(255, 255, 255, 0.15)",
-
-  // Status
-  danger: "#E57373",
-  dangerLight: "#FFCDD2",
-  success: "#7BC67B",
-  successLight: "#C8E6C9",
-
-  // Pet colors
-  petPink: "#FF9E8E",
-  petCoral: "#FF7B6B",
-  petCream: "#FFE8D6",
-  petBlush: "#FFB5B5",
-  petGlow: "rgba(255, 158, 142, 0.4)",
-
-  // Shadow
-  shadow: "rgba(0, 0, 0, 0.3)",
-  shadowStrong: "rgba(0, 0, 0, 0.5)",
-
-  // Special atmospheric
-  nightBg: "#1A1625",
-  nightSurface: "#242030",
-  star: "#FFFFFF",
-  moon: "#FFF8E7",
-  windowSky: "#1E2A4A",
+  background: "#140F1F",
+  backgroundLight: "#211630",
+  surface: "rgba(255,255,255,0.10)",
+  surfaceElevated: "rgba(255,255,255,0.16)",
+  surfaceWarm: "rgba(255,214,224,0.22)",
+  primary: "#FF5C8A",
+  primaryLight: "#FF8FB1",
+  primaryDark: "#D94572",
+  primaryGlow: "rgba(255,92,138,0.35)",
+  secondary: "#8B5CF6",
+  secondaryLight: "#A78BFA",
+  secondaryGlow: "rgba(139,92,246,0.35)",
+  accent: "#FFD6E0",
+  text: "#FFF7FA",
+  textMuted: "#CCBBC8",
+  textLight: "#A48FA7",
+  textDark: "#31162B",
+  border: "rgba(255,255,255,0.18)",
+  borderLight: "rgba(255,255,255,0.26)",
+  danger: "#FF6A8E",
+  dangerLight: "#FFD8E3",
+  success: "#8FF0C4",
+  successLight: "#CFFBE8",
+  shadow: "rgba(0, 0, 0, 0.35)",
+  shadowStrong: "rgba(0, 0, 0, 0.55)",
 } as const;
 
 export default Colors;
