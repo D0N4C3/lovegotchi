@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import { View, StyleSheet } from "react-native";
-import { Home, BookHeart, Users, User } from "lucide-react-native";
+import { Home, BookHeart, Users, User, MessageCircleHeart } from "lucide-react-native";
 import Colors from "@/constants/colors";
 
 function TabIcon({ focused, icon: Icon }: { focused: boolean; icon: typeof Home }) {
@@ -56,6 +56,13 @@ export default function TabLayout() {
         options={{
           title: "Memories",
           tabBarIcon: ({ focused }) => <TabIcon focused={focused} icon={BookHeart} />,
+        }}
+      />
+      <Tabs.Screen
+        name="chat"
+        options={{
+          title: "Chat",
+          tabBarIcon: ({ focused }) => <TabIcon focused={focused} icon={MessageCircleHeart} />,
         }}
       />
       <Tabs.Screen

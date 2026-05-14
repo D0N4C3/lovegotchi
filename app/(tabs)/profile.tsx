@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, Text, View, StyleSheet, Pressable, Switch, Alert } from "react-native";
+import { ScrollView, Text, View, StyleSheet, Pressable, Switch } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import {
@@ -21,6 +21,8 @@ import Colors from "@/constants/colors";
 import { usePetStore } from "@/store/petStore";
 import { useAuthStore } from "@/store/authStore";
 import AchievementBadge from "@/components/AchievementBadge";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { useToast } from "@/providers/ToastProvider";
 
 interface SettingRowProps {
   icon: React.ReactNode;
@@ -60,29 +62,17 @@ export default function ProfileScreen() {
   const [notifications, setNotifications] = React.useState(true);
   const [darkMode, setDarkMode] = React.useState(true);
   const [copied, setCopied] = React.useState(false);
+  const [showLogoutDialog, setShowLogoutDialog] = React.useState(false);
+  const { show } = useToast();
 
   const handleCopyUsername = () => {
     if (!user) return;
     setCopied(true);
+    show("Username copied");
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleLogout = () => {
-    Alert.alert(
-      "Sign Out",
-      "Are you sure you want to sign out? Your pet and memories will be saved.",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Sign Out",
-          style: "destructive",
-          onPress: () => {
-            logout();
-          },
-        },
-      ]
-    );
-  };
+  const handleLogout = () => setShowLogoutDialog(true);
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top"]}>
@@ -243,6 +233,14 @@ export default function ProfileScreen() {
         </Pressable>
 
         <View style={styles.bottomSpacer} />
+        <ConfirmDialog
+          visible={showLogoutDialog}
+          title="Sign Out"
+          message="Are you sure you want to sign out? Your pet and memories will be saved."
+          confirmLabel="Sign Out"
+          onCancel={() => setShowLogoutDialog(false)}
+          onConfirm={() => { setShowLogoutDialog(false); logout(); }}
+        />
       </ScrollView>
     </SafeAreaView>
   );
