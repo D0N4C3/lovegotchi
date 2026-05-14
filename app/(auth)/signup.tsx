@@ -1,74 +1,33 @@
-import { View, TextInput, Pressable, Text, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { Link } from "expo-router";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { AuthShell } from "@/components/auth/AuthShell";
+import { AuthInput } from "@/components/auth/AuthInput";
+import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import { usePasswordStrength } from "@/hooks/usePasswordStrength";
 import { useAuth } from "@/providers/AuthProvider";
+import { useToast } from "@/providers/ToastProvider";
 import Colors from "@/constants/colors";
 
+const schema = z.object({ username: z.string().min(2), email: z.email(), password: z.string().min(8), confirmPassword: z.string(), terms: z.literal(true) }).refine((d) => d.password === d.confirmPassword, { path: ["confirmPassword"], message: "Passwords do not match" });
+
 export default function Signup() {
-  const { signup, loginGoogle, authLoading } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
-  const submit = async () => {
-    try {
-      setError("");
-      await signup(email.trim(), password);
-    } catch (ex: any) {
-      setError(ex?.message ?? "Unable to sign up");
-    }
-  };
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Create account</Text>
-      <TextInput
-        placeholder="Email"
-        placeholderTextColor={Colors.textLight}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-      />
-      <TextInput
-        secureTextEntry
-        placeholder="Password"
-        placeholderTextColor={Colors.textLight}
-        value={password}
-        onChangeText={setPassword}
-        style={styles.input}
-      />
-      {!!error && <Text style={styles.error}>{error}</Text>}
-      <Pressable style={styles.button} onPress={submit} disabled={authLoading}>
-        <Text style={styles.buttonText}>Sign up</Text>
-      </Pressable>
-      <Pressable style={styles.googleButton} onPress={loginGoogle} disabled={authLoading}>
-        <Text style={styles.googleButtonText}>Continue with Google</Text>
-      </Pressable>
-      <Link href="/(auth)/login" style={styles.link}>
-        Already have an account? Log in
-      </Link>
-    </View>
-  );
+  const { signup, loginGoogle, authLoading } = useAuth(); const toast = useToast();
+  const { control, watch, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(schema), defaultValues: { username: "", email: "", password: "", confirmPassword: "", terms: true } });
+  const strength = usePasswordStrength(watch("password"));
+  const submit = handleSubmit(async (v) => { try { await signup(v.email.trim(), v.password); toast.show("Account created. Check your inbox to verify email."); } catch (e: any) { toast.show(e?.message ?? "Sign up failed"); } });
+  return <AuthShell><Text style={styles.h}>Create your cozy nest</Text>
+    <Controller control={control} name="username" render={({ field }) => <AuthInput label="Username" value={field.value} onChangeText={field.onChange} error={errors.username?.message as string} />} />
+    <Controller control={control} name="email" render={({ field }) => <AuthInput label="Email" value={field.value} onChangeText={field.onChange} error={errors.email?.message as string} />} />
+    <Controller control={control} name="password" render={({ field }) => <AuthInput label="Password" secureTextEntry value={field.value} onChangeText={field.onChange} error={errors.password?.message as string} />} />
+    <View style={styles.meter}><View style={[styles.fill, { width: `${Math.max(strength.score, 1) * 25}%` }]} /></View><Text style={styles.meta}>{strength.label}</Text>
+    <Controller control={control} name="confirmPassword" render={({ field }) => <AuthInput label="Confirm password" secureTextEntry value={field.value} onChangeText={field.onChange} error={errors.confirmPassword?.message as string} />} />
+    <PrimaryButton label={authLoading ? "Creating..." : "Create account"} onPress={submit} disabled={authLoading} />
+    <PrimaryButton style={styles.google} label="Sign up with Google" onPress={loginGoogle} disabled={authLoading} />
+    <Link href="/(auth)/login" style={styles.link}>Already have an account? Log in</Link>
+  </AuthShell>;
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, justifyContent: "center", backgroundColor: Colors.background },
-  heading: { fontSize: 28, color: Colors.text, fontWeight: "800", marginBottom: 16 },
-  input: {
-    backgroundColor: Colors.surface,
-    color: Colors.text,
-    padding: 14,
-    borderRadius: 12,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  button: { backgroundColor: Colors.primary, padding: 14, borderRadius: 12, alignItems: "center" },
-  buttonText: { color: Colors.background, fontWeight: "700" },
-  googleButton: { backgroundColor: Colors.surfaceWarm, padding: 14, borderRadius: 12, alignItems: "center", marginTop: 10 },
-  googleButtonText: { color: Colors.text },
-  error: { color: Colors.danger, marginBottom: 8 },
-  link: { color: Colors.textLight, textAlign: "center", marginTop: 16 },
-});
+const styles = StyleSheet.create({ h: { color: Colors.text, fontSize: 24, fontWeight: "800" }, meter: { height: 8, backgroundColor: "rgba(255,255,255,0.2)", borderRadius: 99, overflow: "hidden" }, fill: { height: "100%", backgroundColor: Colors.primary }, meta: { color: Colors.textMuted, fontSize: 12 }, google: { backgroundColor: "rgba(255,255,255,0.25)" }, link: { color: Colors.accent, textAlign: "center" } });
