@@ -49,7 +49,8 @@
       "firebaseAppId": "${EXPO_PUBLIC_FIREBASE_APP_ID}",
       "googleOauthWebClientId": "${EXPO_PUBLIC_GOOGLE_OAUTH_WEB_CLIENT_ID}",
       "googleOauthIosClientId": "${EXPO_PUBLIC_GOOGLE_OAUTH_IOS_CLIENT_ID}",
-      "googleOauthAndroidClientId": "${EXPO_PUBLIC_GOOGLE_OAUTH_ANDROID_CLIENT_ID}"
+      "googleOauthAndroidClientId": "${EXPO_PUBLIC_GOOGLE_OAUTH_ANDROID_CLIENT_ID}",
+      "googleOauthExpoClientId": "${EXPO_PUBLIC_GOOGLE_OAUTH_EXPO_CLIENT_ID}"
     }
   }
 }
