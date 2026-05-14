@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, onSnapshot, query, runTransaction, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, onSnapshot, query, runTransaction, serverTimestamp, setDoc, updateDoc, where } from "@react-native-firebase/firestore";
 import { db } from "@/services/firebase/config";
 import type { PartnerRequest, PetDoc, Relationship, UserProfile, PetType } from "@/types/models";
 

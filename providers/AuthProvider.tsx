@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged, User } from "@react-native-firebase/auth";
 import { auth } from "@/services/firebase/config";
 import { createOrGetProfile, listenPet, listenProfile, listenRelationship, listenRequests } from "@/services/firestore/userService";
-import { emailLogin, emailSignUp, logoutUser, requestPasswordReset, signInWithGoogleToken, useGooglePrompt } from "@/services/auth/authService";
+import { emailLogin, emailSignUp, loginWithGoogle, logoutUser, requestPasswordReset } from "@/services/auth/authService";
 import type { PartnerRequest, PetDoc, Relationship, UserProfile } from "@/types/models";
 
 const AuthContext = createContext<any>(null);
@@ -16,14 +16,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [requests, setRequests] = useState<PartnerRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [authLoading, setAuthLoading] = useState(false);
-  const [request, response, promptAsync] = useGooglePrompt();
 
   useEffect(() => onAuthStateChanged(auth, async (user) => { setFirebaseUser(user); if (user) await createOrGetProfile({ uid: user.uid, displayName: user.displayName ?? "", username: `user_${user.uid.slice(0, 6)}`, inviteCode: genCode(), avatar: user.photoURL, email: user.email ?? "", partnerId: null, relationshipId: null, onboardingCompleted: false, pushToken: null, premium: false }); setLoading(false); }), []);
   useEffect(() => { if (!firebaseUser) return; return listenProfile(firebaseUser.uid, setProfile); }, [firebaseUser?.uid]);
   useEffect(() => { if (!profile?.uid) return; return listenRequests(profile.uid, setRequests); }, [profile?.uid]);
   useEffect(() => { if (!profile?.relationshipId) return; return listenRelationship(profile.relationshipId, setRelationship); }, [profile?.relationshipId]);
   useEffect(() => { if (!relationship?.petId) return; return listenPet(relationship.petId, setPet); }, [relationship?.petId]);
-  useEffect(() => { if (response?.type === "success" && response.authentication?.idToken) signInWithGoogleToken(response.authentication.idToken); }, [response]);
 
   const withLoading = async (fn: () => Promise<any>) => {
     setAuthLoading(true);
@@ -31,13 +29,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const value = useMemo(() => ({
-    firebaseUser, profile, relationship, pet, requests, loading, authLoading, googleReady: !!request,
+    firebaseUser, profile, relationship, pet, requests, loading, authLoading, googleReady: true,
     login: (email: string, password: string) => withLoading(() => emailLogin(email, password)),
     signup: (email: string, password: string) => withLoading(() => emailSignUp(email, password)),
     forgotPassword: (email: string) => withLoading(() => requestPasswordReset(email)),
-    loginGoogle: () => promptAsync(),
+    loginGoogle: () => withLoading(loginWithGoogle),
     logout: () => withLoading(logoutUser),
-  }), [firebaseUser, profile, relationship, pet, requests, loading, authLoading, request]);
+  }), [firebaseUser, profile, relationship, pet, requests, loading, authLoading]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

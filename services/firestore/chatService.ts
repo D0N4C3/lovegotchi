@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc } from "@react-native-firebase/firestore";
 import { db } from '@/services/firebase/config';
 import type { ChatMessage, ConversationDoc } from '@/types/chat';
 
