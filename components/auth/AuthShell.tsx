@@ -1,36 +1,54 @@
-import React from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { BlurView } from "expo-blur";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import Colors from "@/constants/colors";
 
 export function AuthShell({ children }: { children: React.ReactNode }) {
   return (
-    <LinearGradient colors={["#140F1F", "#341935", "#5A2149"]} style={styles.gradient}>
-      <View style={[styles.blob, styles.blobOne]} />
-      <View style={[styles.blob, styles.blobTwo]} />
-      <SafeAreaView style={styles.safeArea}>
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.flex}>
-          <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.content}>
-            <Animated.View entering={FadeInDown.duration(550)}>
-              <BlurView intensity={35} tint="light" style={styles.card}>{children}</BlurView>
-            </Animated.View>
-          </ScrollView>
-        </KeyboardAvoidingView>
+    <View style={s.root}>
+      {/* Background orbs */}
+      <View style={[s.orb, s.orb1]} />
+      <View style={[s.orb, s.orb2]} />
+      <View style={[s.orb, s.orb3]} />
+      <SafeAreaView style={s.safe}>
+        <ScrollView
+          contentContainerStyle={s.scroll}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <LogoBadge />
+          {children}
+        </ScrollView>
       </SafeAreaView>
-    </LinearGradient>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  gradient: { flex: 1 },
-  safeArea: { flex: 1 },
-  flex: { flex: 1 },
-  content: { flexGrow: 1, justifyContent: "center", padding: 20 },
-  card: { borderRadius: 28, padding: 22, overflow: "hidden", borderWidth: 1, borderColor: Colors.border, gap: 14 },
-  blob: { position: "absolute", width: 240, height: 240, borderRadius: 999, backgroundColor: Colors.primaryGlow },
-  blobOne: { top: -40, left: -70 },
-  blobTwo: { bottom: -50, right: -60, backgroundColor: Colors.secondaryGlow },
+function LogoBadge() {
+  return (
+    <View style={s.logoBadge}>
+      <View style={s.logoPill}>
+        <View style={s.logoDot} />
+        <Text style={s.logoText}>Lovegotchi</Text>
+      </View>
+    </View>
+  );
+}
+
+const s = StyleSheet.create({
+  root: { flex: 1, backgroundColor: Colors.bg },
+  safe: { flex: 1 },
+  scroll: { flexGrow: 1, padding: 28, paddingTop: 16, gap: 16 },
+  orb: { position: "absolute", borderRadius: 999 },
+  orb1: { width: 280, height: 280, backgroundColor: Colors.primary, opacity: 0.20, top: -100, right: -80, transform: [{ scale: 1 }] },
+  orb2: { width: 200, height: 200, backgroundColor: Colors.secondary, opacity: 0.15, bottom: 60, left: -60 },
+  orb3: { width: 160, height: 160, backgroundColor: Colors.teal, opacity: 0.12, bottom: 180, right: 20 },
+  logoBadge: { marginBottom: 4 },
+  logoPill: {
+    alignSelf: "flex-start", flexDirection: "row", alignItems: "center", gap: 6,
+    backgroundColor: "rgba(127,119,221,0.20)", borderWidth: 0.5,
+    borderColor: "rgba(127,119,221,0.45)", borderRadius: 999,
+    paddingHorizontal: 12, paddingVertical: 6,
+  },
+  logoDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.primaryLight },
+  logoText: { fontSize: 12, fontWeight: "600", color: Colors.primaryLight, letterSpacing: 0.5 },
 });
