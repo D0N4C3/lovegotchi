@@ -1,38 +1,37 @@
-import Constants from "expo-constants";
-import { GoogleAuthProvider, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signInWithCredential, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import * as Google from "expo-auth-session/providers/google";
-import { makeRedirectUri } from "expo-auth-session";
-import * as WebBrowser from "expo-web-browser";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { GoogleAuthProvider, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signInWithCredential, signInWithEmailAndPassword, signOut } from "@react-native-firebase/auth";
 import { auth } from "@/services/firebase/config";
 
-WebBrowser.maybeCompleteAuthSession();
-type ExtraConfig = Record<string, string | undefined>;
-const extra = { ...(((Constants as any).manifest2?.extra ?? {}) as ExtraConfig), ...((Constants.easConfig?.extra ?? {}) as ExtraConfig), ...((Constants.expoConfig?.extra ?? {}) as ExtraConfig) };
-const getGoogleConfigValue = (envKey: string, extraKey: keyof ExtraConfig, fallbackValue?: string) => process.env[envKey] ?? extra[extraKey] ?? fallbackValue;
+const googleServices = require("../../google-services.json");
 
-const googleAuthConfig = {
-  expoClientId: getGoogleConfigValue("EXPO_PUBLIC_GOOGLE_OAUTH_EXPO_CLIENT_ID", "googleOauthExpoClientId"),
-  webClientId: getGoogleConfigValue("EXPO_PUBLIC_GOOGLE_OAUTH_WEB_CLIENT_ID", "googleOauthWebClientId"),
-  iosClientId: getGoogleConfigValue("EXPO_PUBLIC_GOOGLE_OAUTH_IOS_CLIENT_ID", "googleOauthIosClientId"),
-  androidClientId: getGoogleConfigValue("EXPO_PUBLIC_GOOGLE_OAUTH_ANDROID_CLIENT_ID", "googleOauthAndroidClientId"),
-};
+const webClientId: string | undefined =
+  googleServices?.client?.[0]?.oauth_client?.find((client: { client_type: number }) => client.client_type === 3)?.client_id;
+
+GoogleSignin.configure({
+  webClientId,
+  offlineAccess: false,
+});
 
 export const emailSignUp = async (email: string, password: string) => {
   const cred = await createUserWithEmailAndPassword(auth, email, password);
   await sendEmailVerification(cred.user);
   return cred;
 };
+
 export const emailLogin = (email: string, password: string) => signInWithEmailAndPassword(auth, email, password);
+
 export const requestPasswordReset = (email: string) => sendPasswordResetEmail(auth, email);
+
 export const logoutUser = () => signOut(auth);
 
-export const useGooglePrompt = () =>
-  Google.useAuthRequest({
-    expoClientId: googleAuthConfig.expoClientId,
-    webClientId: googleAuthConfig.webClientId,
-    iosClientId: googleAuthConfig.iosClientId,
-    androidClientId: googleAuthConfig.androidClientId,
-    redirectUri: makeRedirectUri({ scheme: "lovegotchi", path: "oauthredirect" }),
-  });
+export const loginWithGoogle = async () => {
+  await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+  const result = await GoogleSignin.signIn();
+  const token = result.data?.idToken ?? result.idToken;
 
-export const signInWithGoogleToken = async (idToken: string) => signInWithCredential(auth, GoogleAuthProvider.credential(idToken));
+  if (!token) {
+    throw new Error("Google Sign-In succeeded, but no ID token was returned.");
+  }
+
+  return signInWithCredential(auth, GoogleAuthProvider.credential(token));
+};
