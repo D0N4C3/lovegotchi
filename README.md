@@ -1,318 +1,778 @@
-# Welcome to your Rork app
+# Project Overview — “Lovegotchi” (Working Title)
 
-## Project info
+## Tagline
 
-This is a native cross-platform mobile app created with [Rork](https://rork.com)
+**Raise a shared digital lifeform with your partner — together.**
 
-**Platform**: Native iOS & Android app, exportable to web
-**Framework**: Expo Router + React Native
+A cozy mobile game/app for couples in long-distance relationships where both partners care for a shared evolving creature. The creature reflects the health, consistency, memories, and teamwork of the relationship itself.
 
-## How can I edit this code?
+Unlike messaging apps, Lovegotchi creates a shared emotional responsibility and turns everyday interactions into progression, bonding, and memories.
 
-There are several ways of editing your native mobile application.
+---
 
-### **Use Rork**
+# 1. Vision
 
-Simply visit [rork.com](https://rork.com) and prompt to build your app with AI.
+Long-distance couples often:
 
-Changes made via Rork will be committed automatically to this GitHub repo.
+- get tired of repetitive texting
+- struggle to feel “present”
+- miss small daily rituals
+- lose excitement in communication routines
 
-Whenever you make a change in your local code editor and push it to GitHub, it will be also reflected in Rork.
+Lovegotchi introduces:
 
-### **Use your preferred code editor**
+- shared goals
+- emotional gameplay
+- cooperative nurturing
+- memory preservation
+- low-pressure intimacy
 
-If you want to work locally using your own code editor, you can clone this repo and push changes. Pushed changes will also be reflected in Rork.
+The app becomes:
 
-If you are new to coding and unsure which editor to use, we recommend Cursor. If you're familiar with terminals, try Claude Code.
+- part pet simulator
+- part relationship companion
+- part cozy game
+- part memory capsule
 
-The only requirement is having Node.js & Bun installed - [install Node.js with nvm](https://github.com/nvm-sh/nvm) and [install Bun](https://bun.sh/docs/installation)
+---
 
-Follow these steps:
+# 2. Core Gameplay Loop
 
-```bash
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+The loop should be simple, addictive, and emotional.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Daily Loop
 
-# Step 3: Install the necessary dependencies.
-bun i
+Users:
 
-# Step 4: Start the instant web preview of your Rork app in your browser, with auto-reloading of your changes
-bun run start-web
+1. Open app
+2. Check shared pet
+3. Complete care tasks
+4. Interact with partner
+5. Earn growth/progression
+6. Unlock cosmetics/evolutions
+7. Maintain streaks
 
-# Step 5: Start iOS preview
-# Option A (recommended):
-bun run start  # then press "i" in the terminal to open iOS Simulator
-# Option B (if supported by your environment):
-bun run start -- --ios
-```
+---
 
-### **Edit a file directly in GitHub**
+# 3. Core Concept
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Each couple shares:
 
-## What technologies are used for this project?
+- one home
+- one pet/family
+- one progression system
+- one relationship streak
 
-This project is built with the most popular native mobile cross-platform technical stack:
+The pet:
 
-- **React Native** - Cross-platform native mobile development framework created by Meta and used for Instagram, Airbnb, and lots of top apps in the App Store
-- **Expo** - Extension of React Native + platform used by Discord, Shopify, Coinbase, Telsa, Starlink, Eightsleep, and more
-- **Expo Router** - File-based routing system for React Native with support for web, server functions and SSR
-- **TypeScript** - Type-safe JavaScript
-- **React Query** - Server state management
-- **Lucide React Native** - Beautiful icons
+- evolves
+- develops moods
+- reacts to interactions
+- remembers memories
+- grows over time
 
-## How can I test my app?
+If both users actively care:
 
-### **On your phone (Recommended)**
+- pet thrives
+- unlocks rare forms
+- earns leaderboard rank
 
-1. **iOS**: Download the [Rork app from the App Store](https://apps.apple.com/app/rork) or [Expo Go](https://apps.apple.com/app/expo-go/id982107779)
-2. **Android**: Download the [Expo Go app from Google Play](https://play.google.com/store/apps/details?id=host.exp.exponent)
-3. Run `bun run start` and scan the QR code from your development server
+If neglected:
 
-### **In your browser**
+- pet weakens
+- becomes lonely
+- can eventually die
 
-Run `bun start-web` to test in a web browser. Note: The browser preview is great for quick testing, but some native features may not be available.
+---
 
-### **iOS Simulator / Android Emulator**
+# 4. Emotional Design Philosophy
 
-You can test Rork apps in Expo Go or Rork iOS app. You don't need XCode or Android Studio for most features.
+The app should feel:
 
-**When do you need Custom Development Builds?**
+- cozy
+- playful
+- emotionally warm
+- rewarding
+- calming
 
-- Native authentication (Face ID, Touch ID, Apple Sign In)
-- In-app purchases and subscriptions
-- Push notifications
-- Custom native modules
+### NOT:
 
-Learn more: [Expo Custom Development Builds Guide](https://docs.expo.dev/develop/development-builds/introduction/)
+- manipulative
+- guilt-inducing
+- stressful
+- “relationship surveillance”
 
-If you have XCode (iOS) or Android Studio installed:
+The pet communicates emotions softly.
 
-```bash
-# iOS Simulator
-bun run start -- --ios
+### Example
 
-# Android Emulator
-bun run start -- --android
-```
+✅ “Mochi waited for you today.”  
+❌ “Your partner ignored you.”
 
-## How can I deploy this project?
+---
 
-### **Publish to App Store (iOS)**
+# 5. Free Features
 
-1. **Install EAS CLI**:
+## A. Shared Pet System
 
-   ```bash
-   bun i -g @expo/eas-cli
-   ```
+### Features
 
-2. **Configure your project**:
+- One shared pet per couple
+- Shared care responsibilities
+- Pet naming
+- Pet evolution stages
+- Mood system
+- Hunger/energy/love stats
+- Pet animations/reactions
 
-   ```bash
-   eas build:configure
-   ```
+### Pet Types
 
-3. **Build for iOS**:
+Starter pets:
 
-   ```bash
-   eas build --platform ios
-   ```
+- blob
+- fox
+- bunny
+- alien
+- cloud spirit
 
-4. **Submit to App Store**:
-   ```bash
-   eas submit --platform ios
-   ```
+---
 
-For detailed instructions, visit [Expo's App Store deployment guide](https://docs.expo.dev/submit/ios/).
+## B. Daily Care Actions
 
-### **Publish to Google Play (Android)**
+Each action contributes to:
 
-1. **Build for Android**:
+- happiness
+- bond XP
+- evolution progress
 
-   ```bash
-   eas build --platform android
-   ```
+### Actions
 
-2. **Submit to Google Play**:
-   ```bash
-   eas submit --platform android
-   ```
+- Feed
+- Bathe
+- Play
+- Tuck into bed
+- Give affection
+- Talk to pet
+- Decorate room
 
-For detailed instructions, visit [Expo's Google Play deployment guide](https://docs.expo.dev/submit/android/).
+---
 
-### **Publish as a Website**
+## C. Couple Streak System
 
-Your React Native app can also run on the web:
+Tracks:
 
-1. **Build for web**:
+- consecutive active days
+- shared interactions
+- cooperative completion
 
-   ```bash
-   eas build --platform web
-   ```
+### Rewards
 
-2. **Deploy with EAS Hosting**:
-   ```bash
-   eas hosting:configure
-   eas hosting:deploy
-   ```
+- cosmetics
+- furniture
+- special animations
+- evolution boosts
 
-Alternative web deployment options:
+---
 
-- **Vercel**: Deploy directly from your GitHub repository
-- **Netlify**: Connect your GitHub repo to Netlify for automatic deployments
+## D. Push Notifications
 
-## App Features
+Emotionally intelligent reminders.
 
-This template includes:
+### Examples
 
-- **Cross-platform compatibility** - Works on iOS, Android, and Web
-- **File-based routing** with Expo Router
-- **Tab navigation** with customizable tabs
-- **Modal screens** for overlays and dialogs
-- **TypeScript support** for better development experience
-- **Async storage** for local data persistence
-- **Vector icons** with Lucide React Native
+- “Luna misses both of you.”
+- “Your pet is excited to see you today.”
+- “Your creature wants bedtime cuddles.”
 
-## Project Structure
+Never aggressive.
 
-```
-├── app/                    # App screens (Expo Router)
-│   ├── (tabs)/            # Tab navigation screens
-│   │   ├── _layout.tsx    # Tab layout configuration
-│   │   └── index.tsx      # Home tab screen
-│   ├── _layout.tsx        # Root layout
-│   ├── modal.tsx          # Modal screen example
-│   └── +not-found.tsx     # 404 screen
-├── assets/                # Static assets
-│   └── images/           # App icons and images
-├── constants/            # App constants and configuration
-├── app.json             # Expo configuration
-├── package.json         # Dependencies and scripts
-└── tsconfig.json        # TypeScript configuration
-```
+---
 
-## Custom Development Builds
+## E. Shared Room/Home
 
-For advanced native features, you'll need to create a Custom Development Build instead of using Expo Go.
+The pet lives in:
 
-### **When do you need a Custom Development Build?**
+- customizable room
+- house
+- island
+- tiny world
 
-- **Native Authentication**: Face ID, Touch ID, Apple Sign In, Google Sign In
-- **In-App Purchases**: App Store and Google Play subscriptions
-- **Advanced Native Features**: Third-party SDKs, platform-specifc features (e.g. Widgets on iOS)
-- **Background Processing**: Background tasks, location tracking
+Free users can:
 
-### **Creating a Custom Development Build**
+- unlock decorations slowly
+- move furniture
+- customize themes
 
-```bash
-# Install EAS CLI
-bun i -g @expo/eas-cli
+---
 
-# Configure your project for development builds
-eas build:configure
+## F. Memory System
 
-# Create a development build for your device
-eas build --profile development --platform ios
-eas build --profile development --platform android
+Couples can attach:
 
-# Install the development build on your device and start developing
-bun start --dev-client
-```
+- photos
+- voice notes
+- text memories
 
-**Learn more:**
+### Examples
 
-- [Development Builds Introduction](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Creating Development Builds](https://docs.expo.dev/develop/development-builds/create-a-build/)
-- [Installing Development Builds](https://docs.expo.dev/develop/development-builds/installation/)
+- “First movie night”
+- “Airport goodbye”
+- “3 month anniversary”
 
-## Advanced Features
+The pet references memories later.
 
-### **Add a Database**
+### Example
 
-Integrate with backend services:
+“Luma replayed your beach memory today.”
 
-- **Supabase** - PostgreSQL database with real-time features
-- **Firebase** - Google's mobile development platform
-- **Custom API** - Connect to your own backend
+This becomes emotionally powerful.
 
-### **Add Authentication**
+---
 
-Implement user authentication:
+## G. Leaderboards
 
-**Basic Authentication (works in Expo Go):**
+### Leaderboard Categories
 
-- **Expo AuthSession** - OAuth providers (Google, Facebook, Apple) - [Guide](https://docs.expo.dev/guides/authentication/)
-- **Supabase Auth** - Email/password and social login - [Integration Guide](https://supabase.com/docs/guides/getting-started/tutorials/with-expo-react-native)
-- **Firebase Auth** - Comprehensive authentication solution - [Setup Guide](https://docs.expo.dev/guides/using-firebase/)
+- longest surviving pet
+- highest happiness
+- rarest evolution
+- longest streak
+- most memories collected
 
-**Native Authentication (requires Custom Development Build):**
+Global + friends leaderboard.
 
-- **Apple Sign In** - Native Apple authentication - [Implementation Guide](https://docs.expo.dev/versions/latest/sdk/apple-authentication/)
-- **Google Sign In** - Native Google authentication - [Setup Guide](https://docs.expo.dev/guides/google-authentication/)
+---
 
-### **Add Push Notifications**
+## H. Mini Games
 
-Send notifications to your users:
+Cooperative mini-games:
 
-- **Expo Notifications** - Cross-platform push notifications
-- **Firebase Cloud Messaging** - Advanced notification features
+- fishing
+- gardening
+- cooking
+- cleaning
+- treasure hunts
 
-### **Add Payments**
+Designed for:
 
-Monetize your app:
+- 30 sec–3 min sessions
 
-**Web & Credit Card Payments (works in Expo Go):**
+Important for retention.
 
-- **Stripe** - Credit card payments and subscriptions - [Expo + Stripe Guide](https://docs.expo.dev/guides/using-stripe/)
-- **PayPal** - PayPal payments integration - [Setup Guide](https://developer.paypal.com/docs/checkout/mobile/react-native/)
+---
 
-**Native In-App Purchases (requires Custom Development Build):**
+## I. Relationship Milestones
 
-- **RevenueCat** - Cross-platform in-app purchases and subscriptions - [Expo Integration Guide](https://www.revenuecat.com/docs/expo)
-- **Expo In-App Purchases** - Direct App Store/Google Play integration - [Implementation Guide](https://docs.expo.dev/versions/latest/sdk/in-app-purchases/)
+Automatically celebrates:
 
-**Paywall Optimization:**
+- anniversaries
+- streak milestones
+- evolution milestones
+- birthdays
 
-- **Superwall** - Paywall A/B testing and optimization - [React Native SDK](https://docs.superwall.com/docs/react-native)
-- **Adapty** - Mobile subscription analytics and paywalls - [Expo Integration](https://docs.adapty.io/docs/expo)
+### Special Events Unlock
 
-## I want to use a custom domain - is that possible?
+- themed decorations
+- unique dialogue
+- event evolutions
 
-For web deployments, you can use custom domains with:
+---
 
-- **EAS Hosting** - Custom domains available on paid plans
-- **Netlify** - Free custom domain support
-- **Vercel** - Custom domains with automatic SSL
+# 6. Premium Monetization Features
 
-For mobile apps, you'll configure your app's deep linking scheme in `app.json`.
+## A. Subscription Tier — “Lovegotchi Plus”
 
-## Troubleshooting
+Monthly subscription.
 
-### **App not loading on device?**
+---
 
-1. Make sure your phone and computer are on the same WiFi network
-2. Try using tunnel mode: `bun start -- --tunnel`
-3. Check if your firewall is blocking the connection
+## Premium Features
 
-### **Build failing?**
+### 1. Multiple Pets (“Pet Family System”)
 
-1. Clear your cache: `bunx expo start --clear`
-2. Delete `node_modules` and reinstall: `rm -rf node_modules && bun install`
-3. Check [Expo's troubleshooting guide](https://docs.expo.dev/troubleshooting/build-errors/)
+Couples can raise:
 
-### **Need help with native features?**
+- siblings
+- babies
+- special species
+- seasonal pets
 
-- Check [Expo's documentation](https://docs.expo.dev/) for native APIs
-- Browse [React Native's documentation](https://reactnative.dev/docs/getting-started) for core components
-- Visit [Rork's FAQ](https://rork.com/faq) for platform-specific questions
+Each has:
 
-## About Rork
+- unique personality
+- unique needs
+- different evolution paths
 
-Rork builds fully native mobile apps using React Native and Expo - the same technology stack used by Discord, Shopify, Coinbase, Instagram, and nearly 30% of the top 100 apps on the App Store.
+This becomes:
 
-Your Rork app is production-ready and can be published to both the App Store and Google Play Store. You can also export your app to run on the web, making it truly cross-platform.
+**Pokémon + Tamagotchi + Couple Bonding**
+
+---
+
+### 2. Rare Evolutions
+
+Exclusive premium forms:
+
+- celestial pets
+- galaxy pets
+- dragon forms
+- spirit evolutions
+
+Rare evolution animations.
+
+---
+
+### 3. Expanded Home Worlds
+
+Premium environments:
+
+- floating island
+- underwater home
+- space station
+- fantasy forest
+- cyberpunk city
+
+---
+
+### 4. AI Personality System
+
+Advanced feature later.
+
+Pet:
+
+- learns inside jokes
+- remembers habits
+- comments on memories
+- suggests activities
+
+### Example
+
+“Mochi thinks you two should watch a movie tonight.”
+
+This could become the killer feature.
+
+---
+
+### 5. Shared Dream Mode
+
+At night, the pet “dreams” generate scenes:
+
+- memory montages
+- emotional recaps
+- cute story sequences
+
+Premium users unlock:
+
+- dream customization
+- dream replay archive
+
+---
+
+### 6. Premium Decorations
+
+- furniture packs
+- animated wallpapers
+- weather effects
+- music themes
+- seasonal collections
+
+---
+
+### 7. Couple Journals
+
+Shared private journal:
+
+- daily notes
+- mood entries
+- relationship timeline
+
+---
+
+### 8. Voice Interaction
+
+Pet reacts to:
+
+- voice notes
+- laughing
+- singing
+
+Could later integrate AI voice behavior.
+
+---
+
+### 9. Ghost Revival System
+
+Free users:
+
+- permanent death
+
+Premium users:
+
+- one revival crystal/month
+- OR ghost recovery quest
+
+Emotionally powerful monetization.
+
+---
+
+### 10. Relationship Time Capsule
+
+Store:
+
+- photos
+- letters
+- future messages
+- countdowns
+
+### Example
+
+“Open this memory in 1 year.”
+
+---
+
+# 7. Cosmetics Monetization
+
+Non-pay-to-win only.
+
+## Cosmetic Store
+
+Sell:
+
+- outfits
+- hats
+- furniture
+- animations
+- pets
+- sound packs
+- emotes
+- room themes
+
+---
+
+# 8. Event System
+
+Seasonal events are **CRITICAL** for retention.
+
+## Events
+
+- Valentine’s Day
+- Halloween
+- Christmas
+- Summer Vacation
+- Lunar New Year
+
+Limited-time:
+
+- evolutions
+- cosmetics
+- mini-games
+- story arcs
+
+---
+
+# 9. Social Features
+
+Optional.
+
+## Couple Profiles
+
+Show:
+
+- pet
+- home
+- streak
+- evolution
+- badges
+
+---
+
+## Visiting System
+
+Friends can:
+
+- visit homes
+- leave gifts
+- react to pets
+
+---
+
+## Clan/Family System
+
+Multiple couples can:
+
+- join neighborhoods
+- cooperate in events
+- compete globally
+
+---
+
+# 10. Gamification Systems
+
+## XP System
+
+Earn XP from:
+
+- care
+- mini games
+- consistency
+- memories
+- events
+
+---
+
+## Achievement System
+
+Examples:
+
+- “100 Days Together”
+- “No Missed Feedings”
+- “Raised Legendary Form”
+- “Shared 1,000 Messages”
+
+---
+
+# 11. App Screens / UI Flow
+
+## Onboarding Screens
+
+1. Welcome
+2. App explanation
+3. Choose art style
+4. Create account
+5. Invite partner
+6. Choose starter pet
+7. Tutorial
+
+---
+
+## Main Screens
+
+### 1. Home Screen
+
+Main hub.
+
+Shows:
+
+- pet
+- room
+- mood
+- quick actions
+- notifications
+
+---
+
+### 2. Pet Detail Screen
+
+Shows:
+
+- stats
+- evolution progress
+- memories
+- personality
+- hunger/love meters
+
+---
+
+### 3. Couple Dashboard
+
+Shows:
+
+- streaks
+- milestones
+- interaction stats
+- anniversary countdown
+
+---
+
+### 4. Memory Vault
+
+Gallery of:
+
+- photos
+- voice notes
+- saved moments
+- dream memories
+
+---
+
+### 5. Mini Games Hub
+
+Arcade-style selection menu.
+
+---
+
+### 6. Decoration Shop
+
+Purchase:
+
+- cosmetics
+- furniture
+- themes
+- event items
+
+---
+
+### 7. Evolution Tree Screen
+
+Shows:
+
+- possible evolutions
+- locked forms
+- rare paths
+
+Very important for long-term retention.
+
+---
+
+### 8. Leaderboard Screen
+
+Global rankings.
+
+---
+
+### 9. Notifications Center
+
+Pet messages + partner interactions.
+
+---
+
+### 10. Profile Screen
+
+Shows:
+
+- user avatar
+- badges
+- relationship stats
+- premium status
+
+---
+
+### 11. Settings Screen
+
+Includes:
+
+- privacy
+- notifications
+- themes
+- account management
+
+---
+
+### 12. Premium Screen
+
+Subscription upsell.
+
+Must feel cozy and aspirational.
+
+---
+
+# 12. Art Direction
+
+## Recommended Style
+
+### Cozy Pixel Art
+
+OR
+
+### Soft 2D Nintendo-style
+
+### Why
+
+- cheaper to build
+- emotionally warm
+- timeless
+- highly marketable
+- easier animations
+
+### Avoid
+
+- realistic graphics
+- overly complex 3D
+
+---
+
+# 13. Retention Psychology
+
+The app works because of:
+
+- emotional attachment
+- routine formation
+- shared responsibility
+- evolving progression
+- collectibles
+- memories
+- streaks
+- personalization
+
+The pet becomes:
+
+> “our thing.”
+
+That’s the magic.
+
+---
+
+# 14. Future Expansion Ideas
+
+## AR Mode
+
+Place pet in real world camera.
+
+---
+
+## Wearables Integration
+
+Pet reacts when:
+
+- heart rate changes
+- sleep patterns change
+- users walk together virtually
+
+---
+
+## AI Relationship Companion
+
+Eventually, the pet becomes emotionally intelligent.
+
+Could become:
+
+> the first truly emotional couple companion app.
+
+---
+
+# 15. Tech Stack Recommendation
+
+## Frontend
+
+- Flutter (best for cross-platform)
+- Riverpod state management
+
+## Backend
+
+- Firebase
+- OR Supabase
+
+## Features Needed
+
+- Realtime sync
+- push notifications
+- cloud saves
+- image uploads
+- analytics
+
+---
+
+# 16. Business Potential
+
+This has:
+
+- strong retention potential
+- strong emotional stickiness
+- highly marketable TikTok content
+- subscription opportunities
+- cosmetic monetization
+- global audience
+
+And most importantly:
+
+> It solves a REAL emotional problem in a unique way.
