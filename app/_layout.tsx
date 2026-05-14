@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Stack, useRouter, useSegments } from "expo-router";
+import { Stack, useRootNavigationState, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -14,9 +14,14 @@ const queryClient = new QueryClient();
 function RootLayoutNav() {
   const router = useRouter();
   const segments = useSegments();
+  const rootNavigationState = useRootNavigationState();
   const { isOnboarded } = useAuthStore();
 
   useEffect(() => {
+    if (!rootNavigationState?.key) {
+      return;
+    }
+
     const inOnboarding = segments[0] === "onboarding";
 
     if (!isOnboarded && !inOnboarding) {
@@ -24,7 +29,7 @@ function RootLayoutNav() {
     } else if (isOnboarded && inOnboarding) {
       router.replace("/(tabs)");
     }
-  }, [isOnboarded, segments, router]);
+  }, [isOnboarded, segments, router, rootNavigationState?.key]);
 
   return (
     <Stack screenOptions={{ headerBackTitle: "Back" }}>
