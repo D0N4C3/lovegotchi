@@ -4,52 +4,32 @@ import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import Colors from "@/constants/colors";
-import { useAuthStore } from "@/store/authStore";
+import { AuthProvider, useAuth } from "@/providers/AuthProvider";
 
 SplashScreen.preventAutoHideAsync();
-
 const queryClient = new QueryClient();
 
 function RootLayoutNav() {
+  const { profile, loading } = useAuth();
   const router = useRouter();
   const segments = useSegments();
-  const rootNavigationState = useRootNavigationState();
-  const { isOnboarded } = useAuthStore();
+  const nav = useRootNavigationState();
 
   useEffect(() => {
-    if (!rootNavigationState?.key) {
-      return;
-    }
+    if (!nav?.key || loading) return;
+    const inAuth = segments[0] === "(auth)";
+    const inOnboarding = segments[0] === "(onboarding)";
 
-    const inOnboarding = segments[0] === "onboarding";
+    if (!profile && !inAuth) router.replace("/(auth)/welcome");
+    else if (profile && !profile.partnerId && !inOnboarding) router.replace("/(onboarding)/partner");
+    else if (profile && profile.partnerId && !profile.onboardingCompleted && !inOnboarding) router.replace("/(onboarding)/shared");
+    else if (profile?.onboardingCompleted && (inAuth || inOnboarding)) router.replace("/(tabs)");
+  }, [profile, loading, segments, nav?.key]);
 
-    if (!isOnboarded && !inOnboarding) {
-      router.replace("/onboarding");
-    } else if (isOnboarded && inOnboarding) {
-      router.replace("/(tabs)");
-    }
-  }, [isOnboarded, segments, router, rootNavigationState?.key]);
-
-  return (
-    <Stack screenOptions={{ headerBackTitle: "Back" }}>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-    </Stack>
-  );
+  return <Stack screenOptions={{ headerShown: false }}><Stack.Screen name="(auth)" /><Stack.Screen name="(onboarding)" /><Stack.Screen name="(tabs)" /></Stack>;
 }
 
 export default function RootLayout() {
-  useEffect(() => {
-    SplashScreen.hideAsync();
-  }, []);
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <StatusBar style="dark" />
-        <RootLayoutNav />
-      </GestureHandlerRootView>
-    </QueryClientProvider>
-  );
+  useEffect(() => { SplashScreen.hideAsync(); }, []);
+  return <QueryClientProvider client={queryClient}><GestureHandlerRootView style={{ flex: 1 }}><StatusBar style="light" /><AuthProvider><RootLayoutNav /></AuthProvider></GestureHandlerRootView></QueryClientProvider>;
 }
