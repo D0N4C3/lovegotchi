@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1082720826925",
+    "project_id": "lovegotchi",
+    "storage_bucket": "lovegotchi.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1082720826925:android:d6454ed4f173893bc9eaa4",
+        "android_client_info": {
+          "package_name": "com.qewiygames.lovegotchi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1082720826925-7pgvfi2ohf5mrpfveapm34nit9qqjj5q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCTltWo-RkPisRtHunYwYiLoYDiNPfmP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1082720826925-7pgvfi2ohf5mrpfveapm34nit9qqjj5q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
