@@ -1,7 +1,6 @@
 import Constants from "expo-constants";
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { initializeAuth } from "firebase/auth";
-import { getReactNativePersistence } from "firebase/auth/react-native";
+import { getAuth, initializeAuth, getReactNativePersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -20,8 +19,15 @@ if (!firebaseConfig.apiKey || !firebaseConfig.projectId || !firebaseConfig.appId
   throw new Error("Missing Firebase config. Set EXPO_PUBLIC_FIREBASE_* variables.");
 }
 
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-export const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(AsyncStorage),
-});
-export const db = getFirestore(app);
+const hasInitializedApp = getApps().length > 0;
+const app = hasInitializedApp ? getApp() : initializeApp(firebaseConfig);
+
+const auth = hasInitializedApp
+  ? getAuth(app)
+  : initializeAuth(app, {
+      persistence: getReactNativePersistence(AsyncStorage),
+    });
+
+const db = getFirestore(app);
+
+export { app, auth, db };
