@@ -35,7 +35,7 @@ function LogoBadge() {
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: Colors.bg },
+  root: { flex: 1, backgroundColor: Colors.background },
   safe: { flex: 1 },
   scroll: { flexGrow: 1, padding: 28, paddingTop: 16, gap: 16 },
   orb: { position: "absolute", borderRadius: 999 },
