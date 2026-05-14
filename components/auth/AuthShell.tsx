@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, View, Text } from "react-native";
 import Colors from "@/constants/colors";
 
 export function AuthShell({ children }: { children: React.ReactNode }) {
