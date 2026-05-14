@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1082720826925-lb4639eg5k2gh3u7u273s6a4ldus9qeu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.qewiygames.lovegotchi",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
           "client_id": "1082720826925-7pgvfi2ohf5mrpfveapm34nit9qqjj5q.apps.googleusercontent.com",
           "client_type": 3
         }
