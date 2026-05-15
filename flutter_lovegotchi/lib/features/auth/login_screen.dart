@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../providers/auth_providers.dart';
 import '../../shared/widgets/cozy_scaffold.dart';
+import '../../shared/widgets/app_primitives.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -24,13 +25,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            TextField(controller: email, decoration: const InputDecoration(labelText: 'Email')),
+            AppTextField(controller: email, decoration: const InputDecoration(labelText: 'Email')),
             const SizedBox(height: 12),
-            TextField(controller: password, obscureText: true, decoration: const InputDecoration(labelText: 'Password')),
+            AppTextField(controller: password, obscureText: true, decoration: const InputDecoration(labelText: 'Password')),
             const SizedBox(height: 20),
-            FilledButton(
+            AppPrimaryButton(
               onPressed: state.isLoading ? null : () => ref.read(authControllerProvider.notifier).signInWithEmail(email.text, password.text.trim()),
-              child: const Text('Log In'),
+              label: 'Log In',
             ),
             TextButton(onPressed: () => context.go('/auth/forgot-password'), child: const Text('Forgot password?')),
             TextButton(onPressed: () => context.go('/auth/signup'), child: const Text('Create account')),

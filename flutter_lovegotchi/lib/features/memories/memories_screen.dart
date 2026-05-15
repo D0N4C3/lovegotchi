@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/auth_providers.dart';
 import '../../providers/memory_providers.dart';
 import '../../shared/widgets/cozy_scaffold.dart';
+import '../../shared/widgets/app_primitives.dart';
 
 class MemoriesScreen extends ConsumerStatefulWidget {
   const MemoriesScreen({super.key});
@@ -64,12 +65,12 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
               child: Column(
                 children: [
-                  TextField(controller: _title, decoration: const InputDecoration(hintText: 'Memory title')),
+                  AppTextField(controller: _title, decoration: const InputDecoration(hintText: 'Memory title')),
                   const SizedBox(height: 8),
                   Row(
                     children: [
                       Expanded(
-                        child: TextField(
+                        child: AppTextField(
                           controller: _note,
                           minLines: 1,
                           maxLines: 3,
