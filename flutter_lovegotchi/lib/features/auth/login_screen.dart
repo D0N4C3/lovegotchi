@@ -29,9 +29,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             TextField(controller: password, obscureText: true, decoration: const InputDecoration(labelText: 'Password')),
             const SizedBox(height: 20),
             FilledButton(
-              onPressed: state.isLoading ? null : () => ref.read(authControllerProvider.notifier).signInWithEmail(email.text.trim(), password.text.trim()),
+              onPressed: state.isLoading ? null : () => ref.read(authControllerProvider.notifier).signInWithEmail(email.text, password.text.trim()),
               child: const Text('Log In'),
             ),
+            TextButton(onPressed: () => context.go('/auth/forgot-password'), child: const Text('Forgot password?')),
             TextButton(onPressed: () => context.go('/auth/signup'), child: const Text('Create account')),
             OutlinedButton(onPressed: () => ref.read(authControllerProvider.notifier).signInWithGoogle(), child: const Text('Continue with Google')),
           ],

@@ -20,12 +20,14 @@ class AuthController extends AsyncNotifier<void> {
 
   Future<void> signInWithEmail(String email, String password) async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() => _auth.signInWithEmailAndPassword(email: email, password: password));
+    final normalizedEmail = email.trim().toLowerCase();
+    state = await AsyncValue.guard(() => _auth.signInWithEmailAndPassword(email: normalizedEmail, password: password));
   }
 
   Future<void> signUpWithEmail(String email, String password) async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() => _auth.createUserWithEmailAndPassword(email: email, password: password));
+    final normalizedEmail = email.trim().toLowerCase();
+    state = await AsyncValue.guard(() => _auth.createUserWithEmailAndPassword(email: normalizedEmail, password: password));
   }
 
   Future<void> signInWithGoogle() async {
@@ -39,7 +41,12 @@ class AuthController extends AsyncNotifier<void> {
     });
   }
 
-  Future<void> sendPasswordReset(String email) async => _auth.sendPasswordResetEmail(email: email);
+  Future<String> sendPasswordReset(String email) async {
+    state = const AsyncLoading();
+    final normalizedEmail = email.trim().toLowerCase();
+    state = await AsyncValue.guard(() => _auth.sendPasswordResetEmail(email: normalizedEmail));
+    return state.hasError ? 'Could not send reset email' : 'Password reset email sent 💌';
+  }
 
   Future<void> signOut() => _auth.signOut();
 }

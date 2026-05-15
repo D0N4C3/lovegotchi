@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/go_router_refresh_stream.dart';
+import '../features/auth/forgot_password_screen.dart';
 import '../features/auth/login_screen.dart';
 import '../features/auth/signup_screen.dart';
+import '../features/auth/welcome_screen.dart';
 import '../features/chat/chat_screen.dart';
 import '../features/home/home_shell.dart';
 import '../features/memories/memories_screen.dart';
@@ -16,17 +18,19 @@ import '../providers/auth_providers.dart';
 final routerProvider = Provider<GoRouter>((ref) {
   final auth = ref.watch(authStateChangesProvider);
   return GoRouter(
-    initialLocation: '/auth/login',
+    initialLocation: '/auth/welcome',
     refreshListenable: GoRouterRefreshStream(ref.watch(authStateChangesProvider.stream)),
     redirect: (context, state) {
       final isAuthed = auth.value != null;
       final isAuthRoute = state.matchedLocation.startsWith('/auth');
-      if (!isAuthed && !isAuthRoute) return '/auth/login';
+      if (!isAuthed && !isAuthRoute) return '/auth/welcome';
       if (isAuthed && isAuthRoute) return '/onboarding';
       return null;
     },
     routes: [
+      GoRoute(path: '/auth/welcome', builder: (_, __) => const WelcomeScreen()),
       GoRoute(path: '/auth/login', builder: (_, __) => const LoginScreen()),
+      GoRoute(path: '/auth/forgot-password', builder: (_, __) => const ForgotPasswordScreen()),
       GoRoute(path: '/auth/signup', builder: (_, __) => const SignupScreen()),
       GoRoute(path: '/onboarding', builder: (_, __) => const OnboardingScreen()),
       StatefulShellRoute.indexedStack(
