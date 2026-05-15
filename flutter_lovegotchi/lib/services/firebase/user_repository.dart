@@ -48,6 +48,45 @@ class UserRepository {
     });
   }
 
+
+
+  Future<void> updateProfileBasics({required String uid, required String displayName, required String username}) {
+    return _db.collection('users').doc(uid).set({
+      'displayName': displayName,
+      'username': username,
+      'inviteCode': username,
+    }, SetOptions(merge: true));
+  }
+
+  Future<void> setOnboardingStep({required String relationshipId, required OnboardingStep step}) {
+    return _db.collection('relationships').doc(relationshipId).set({'onboardingStep': _stepToValue(step)}, SetOptions(merge: true));
+  }
+
+  Future<void> invitePartnerByUsername({required String currentUid, required String relationshipId, required String partnerUsername}) async {
+    final normalized = partnerUsername.trim().replaceAll('@', '');
+    final query = await _db.collection('users').where('username', isEqualTo: normalized).limit(1).get();
+    if (query.docs.isEmpty) throw Exception('Could not find that username yet');
+    final partnerUid = query.docs.first.id;
+    if (partnerUid == currentUid) throw Exception('That is your own username');
+    await _db.collection('users').doc(currentUid).set({'partnerId': partnerUid}, SetOptions(merge: true));
+    await _db.collection('users').doc(partnerUid).set({'partnerId': currentUid, 'relationshipId': relationshipId}, SetOptions(merge: true));
+    await _db.collection('relationships').doc(relationshipId).set({
+      'members': FieldValue.arrayUnion([currentUid, partnerUid]),
+    }, SetOptions(merge: true));
+  }
+
+  Future<void> completeOnboarding({required Relationship relationship, required PetType petType, required String petName}) async {
+    final relationshipRef = _db.collection('relationships').doc(relationship.id);
+    final petRef = _db.collection('pets').doc(relationship.petId);
+    await _db.runTransaction((tx) async {
+      tx.set(relationshipRef, {'onboardingStep': 'completed', 'petType': _petTypeToValue(petType)}, SetOptions(merge: true));
+      tx.set(petRef, {'petName': petName.trim(), 'petType': _petTypeToValue(petType), 'stage': 'baby'}, SetOptions(merge: true));
+      for (final member in relationship.members) {
+        tx.set(_db.collection('users').doc(member), {'onboardingCompleted': true}, SetOptions(merge: true));
+      }
+    });
+  }
+
   Future<void> setPetType(String relationshipId, PetType petType) {
     return _db.collection('relationships').doc(relationshipId).update({
       'petType': _petTypeToValue(petType),
@@ -93,6 +132,12 @@ class UserRepository {
         'alien' => PetType.alien,
         'cloud spirit' => PetType.cloudSpirit,
         _ => null,
+      };
+
+  String _stepToValue(OnboardingStep step) => switch (step) {
+        OnboardingStep.petType => 'pet_type',
+        OnboardingStep.nameVote => 'name_vote',
+        OnboardingStep.completed => 'completed',
       };
 
   OnboardingStep _stepFromString(String value) => switch (value) {
