@@ -7,6 +7,7 @@ import '../../providers/auth_providers.dart';
 import '../../providers/user_providers.dart';
 import '../../services/firebase/user_repository.dart';
 import '../../shared/widgets/cozy_scaffold.dart';
+import '../../shared/widgets/app_primitives.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -122,7 +123,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           const Spacer(),
           SizedBox(
             width: double.infinity,
-            child: FilledButton(onPressed: _submitting ? null : () => _goToStep(1), child: const Text('Begin Your Journey')),
+            child: AppPrimaryButton(onPressed: _submitting ? null : () => _goToStep(1), label: 'Begin Your Journey'),
           )
         ],
       );
@@ -136,7 +137,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         const SizedBox(height: 8),
         const Text('Let us know what to call you. We will create a unique username for you to share with your partner.'),
         const SizedBox(height: 10),
-        TextField(controller: _displayNameController, decoration: const InputDecoration(labelText: 'Your name', hintText: 'e.g. Jamie')),
+        AppTextField(controller: _displayNameController, decoration: const InputDecoration(labelText: 'Your name', hintText: 'e.g. Jamie')),
         const SizedBox(height: 12),
         if (_displayNameController.text.trim().length >= 2) ...[
           Text('Your username: @$generatedUsername', style: const TextStyle(fontWeight: FontWeight.w600)),
@@ -146,9 +147,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         const Spacer(),
         SizedBox(
           width: double.infinity,
-          child: FilledButton(
+          child: AppPrimaryButton(
             onPressed: _submitting ? null : () => _saveProfile(profile, relationship, generatedUsername),
-            child: const Text('Continue'),
+            label: 'Continue',
           ),
         )
       ],
@@ -169,13 +170,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           ),
           const SizedBox(height: 12),
           if (!_shareMode) ...[
-            TextField(controller: _partnerUsernameController, decoration: const InputDecoration(labelText: 'Partner username', hintText: '@partner_username')),
+            AppTextField(controller: _partnerUsernameController, decoration: const InputDecoration(labelText: 'Partner username', hintText: '@partner_username')),
             const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
-              child: FilledButton(
+              child: AppPrimaryButton(
                 onPressed: _submitting ? null : () => _savePartner(profile, relationship),
-                child: const Text('Send Invitation'),
+                label: 'Send Invitation',
               ),
             )
           ] else ...[
@@ -211,11 +212,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 .toList(),
           ),
           const SizedBox(height: 12),
-          TextField(controller: _petNameController, decoration: const InputDecoration(labelText: 'Pet name', hintText: 'e.g. Mochi, Luna, Pixel')),
+          AppTextField(controller: _petNameController, decoration: const InputDecoration(labelText: 'Pet name', hintText: 'e.g. Mochi, Luna, Pixel')),
           const Spacer(),
           SizedBox(
             width: double.infinity,
-            child: FilledButton(onPressed: _submitting ? null : () => _completeOnboarding(relationship), child: const Text('Start Our Journey')),
+            child: AppPrimaryButton(onPressed: _submitting ? null : () => _completeOnboarding(relationship), label: 'Start Our Journey'),
           )
         ],
       );

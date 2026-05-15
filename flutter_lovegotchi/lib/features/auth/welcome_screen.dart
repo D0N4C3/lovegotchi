@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../shared/widgets/cozy_scaffold.dart';
+import '../../shared/widgets/app_primitives.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -41,10 +42,7 @@ class WelcomeScreen extends StatelessWidget {
             const Spacer(),
             SizedBox(
               width: double.infinity,
-              child: FilledButton(
-                onPressed: () => context.go('/auth/login'),
-                child: const Text('Continue →'),
-              ),
+              child: AppPrimaryButton(onPressed: () => context.go('/auth/login'), label: 'Continue →'),
             ),
             const SizedBox(height: 10),
             SizedBox(
@@ -69,12 +67,13 @@ class _TagChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(99),
-        border: Border.all(color: Colors.white12),
-        color: Colors.white10,
+        border: Border.all(color: colors.border),
+        color: colors.surface,
       ),
       child: Text(label, style: const TextStyle(fontSize: 12)),
     );

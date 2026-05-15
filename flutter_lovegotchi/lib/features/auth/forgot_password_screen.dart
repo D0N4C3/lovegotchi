@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/auth_providers.dart';
 import '../../shared/widgets/cozy_scaffold.dart';
+import '../../shared/widgets/app_primitives.dart';
 
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -33,9 +34,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           children: [
             const Text('No worries — we\'ll send a reset link to your inbox.'),
             const SizedBox(height: 14),
-            TextField(controller: _email, decoration: const InputDecoration(labelText: 'Email')),
+            AppTextField(controller: _email, decoration: const InputDecoration(labelText: 'Email')),
             const SizedBox(height: 14),
-            FilledButton(
+            AppPrimaryButton(
               onPressed: authState.isLoading
                   ? null
                   : () async {
@@ -44,7 +45,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                       if (!mounted) return;
                       setState(() => _feedback = result);
                     },
-              child: const Text('Send reset link 💌'),
+              label: 'Send reset link 💌',
             ),
             if (_feedback.isNotEmpty) ...[
               const SizedBox(height: 8),

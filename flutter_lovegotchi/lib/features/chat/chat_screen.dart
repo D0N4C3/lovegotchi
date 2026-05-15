@@ -5,6 +5,7 @@ import '../../providers/auth_providers.dart';
 import '../../providers/chat_providers.dart';
 import '../../services/firebase/chat_repository.dart';
 import '../../shared/widgets/cozy_scaffold.dart';
+import '../../shared/widgets/app_primitives.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key});
@@ -63,7 +64,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: TextField(
+                    child: AppTextField(
                       controller: _controller,
                       minLines: 1,
                       maxLines: 4,

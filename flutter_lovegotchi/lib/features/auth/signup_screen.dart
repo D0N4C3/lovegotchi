@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/auth_providers.dart';
 import '../../shared/widgets/cozy_scaffold.dart';
+import '../../shared/widgets/app_primitives.dart';
 
 class SignupScreen extends ConsumerWidget {
   const SignupScreen({super.key});
@@ -16,11 +17,11 @@ class SignupScreen extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(children: [
-          TextField(controller: email, decoration: const InputDecoration(labelText: 'Email')),
+          AppTextField(controller: email, decoration: const InputDecoration(labelText: 'Email')),
           const SizedBox(height: 12),
-          TextField(controller: password, decoration: const InputDecoration(labelText: 'Password'), obscureText: true),
+          AppTextField(controller: password, decoration: const InputDecoration(labelText: 'Password'), obscureText: true),
           const SizedBox(height: 20),
-          FilledButton(onPressed: () => ref.read(authControllerProvider.notifier).signUpWithEmail(email.text.trim(), password.text.trim()), child: const Text('Sign up')),
+          AppPrimaryButton(onPressed: () => ref.read(authControllerProvider.notifier).signUpWithEmail(email.text.trim(), password.text.trim()), label: 'Sign up'),
         ]),
       ),
     );
