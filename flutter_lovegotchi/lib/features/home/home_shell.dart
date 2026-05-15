@@ -15,6 +15,7 @@ class HomeShell extends StatelessWidget {
           NavigationDestination(icon: Icon(Icons.pets), label: 'Pet'),
           NavigationDestination(icon: Icon(Icons.chat_bubble_outline), label: 'Chat'),
           NavigationDestination(icon: Icon(Icons.photo_library_outlined), label: 'Memories'),
+          NavigationDestination(icon: Icon(Icons.people_outline), label: 'Journey'),
           NavigationDestination(icon: Icon(Icons.person_outline), label: 'Profile'),
         ],
         onDestinationSelected: (index) => navigationShell.goBranch(index),
